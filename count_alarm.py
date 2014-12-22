@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import re
 
 SOURCE_FILE_NAME = 'alarm_log.txt'
 REPORT_FILE_NAME = 'count_report.txt'
@@ -17,10 +17,17 @@ def alarmNumFromText(text):
 	alarmNumStr = alarmStr[iAlarmNumPrefix+5: iAlarmNumPrefix + 10]
 	return alarmNumStr
 
+def alarmNumReSearchFromText(text):
+	patternStr = r' ALARM .*? ([0-9]+)'
+	pattern = re.compile(patternStr, re.S)
+	match = pattern.search(text)
+	if match:
+		return match.group(1)
+
 def collectAlarms(alarmTextList):
 	alarms = {}
 	for alarmText in alarmTextList:
-		alarmNum = alarmNumFromText(alarmText)
+		alarmNum =  alarmNumReSearchFromText(alarmText) #alarmNumFromText(alarmText)
 		if alarmNum is None:
 			continue
 		
